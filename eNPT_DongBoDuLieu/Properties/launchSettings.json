@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "eNPT_DongBoDuLieu": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+        //"DOTNET_ENVIRONMENT": "Production"
+      }
+    }
+  }
+}
