@@ -8,7 +8,7 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
     public partial class EN_COTDIEN
     {
         public string MA_COT { get; set; }
-        public decimal? LONG { get; set; }
+        public decimal? LONG_ { get; set; }
         public decimal? LAT { get; set; }
         public string CONGDUNGCOT { get; set; }
         public decimal? CHIEUCAO { get; set; }
@@ -24,7 +24,7 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
         public string HUYEN { get; set; }
         public string XA { get; set; }
         public string LOAI_TD { get; set; }
-        public string MADV { get; set; }
+        public string MADVQL { get; set; }
         public string MAKVHC { get; set; }
         public string CAPDA { get; set; }
         public string TEN_TTD { get; set; }

@@ -74,13 +74,13 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.LONG).HasColumnType("FLOAT");
+                entity.Property(e => e.LONG_).HasColumnType("FLOAT");
 
                 entity.Property(e => e.MACT)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.MADV)
+                entity.Property(e => e.MADVQL)
                     .HasMaxLength(30)
                     .IsUnicode(false);
 
@@ -333,7 +333,7 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
 
                 entity.Property(e => e.LONG).HasColumnType("FLOAT");
 
-                entity.Property(e => e.MADV)
+                entity.Property(e => e.MADVQL)
                     .HasMaxLength(30)
                     .IsUnicode(false);
 

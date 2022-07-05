@@ -1,6 +1,7 @@
 ﻿using eNPT_DongBoDuLieu.Models;
 using eNPT_DongBoDuLieu.Models.DataBases.EVNNPT;
 using eNPT_DongBoDuLieu.Models.Services;
+using eNPT_DongBoDuLieu.Services.DataBases;
 using eNPT_DongBoDuLieu.Services.Datas;
 using eNPT_DongBoDuLieu.Services.Portals;
 using Microsoft.Extensions.Hosting;
@@ -21,18 +22,23 @@ namespace eNPT_DongBoDuLieu.Services
         private readonly AppSettings _appSettings;
         private readonly IDataServices _dataServices;
         private readonly IPortalServices _portalServices;
+        private readonly IDataBaseServices _dataBaseServices;
+        private readonly ModelContext _context;
 
         public Worker(
             ILogger<Worker> logger, 
             IOptions<AppSettings> appSettings,
             ModelContext context,
             IDataServices dataServices,
-            IPortalServices portalServices)
+            IPortalServices portalServices,
+            IDataBaseServices dataBaseServices)
         {
             _logger = logger;
             _appSettings = appSettings.Value;
             _dataServices = dataServices;
             _portalServices = portalServices;
+            _dataBaseServices = dataBaseServices;
+            _context = context;
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)
@@ -109,6 +115,7 @@ namespace eNPT_DongBoDuLieu.Services
                     {
                         _logger.LogInformation($"Đang đồng bộ dữ liệu loại đối tượng {loaiDT} trang {i + 1} trên tổng số {nPage} trang.");
                         var strFeatures = await _portalServices.GetFeatureAsyncs(token, ELoaiDT.COT, lastEditDate, i * maxRecordPerPage, maxRecordPerPage);
+                        await _dataBaseServices.RemoveAndInsertFullTextSearch(loaiDT, strFeatures);
                         //strFeaturess.Add(strFeatures);
                     }
                 } else

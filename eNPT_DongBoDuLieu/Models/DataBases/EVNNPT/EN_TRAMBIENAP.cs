@@ -18,7 +18,7 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
         public string XA { get; set; }
         public decimal? NAM_VH { get; set; }
         public string TEN_TTD { get; set; }
-        public string MADV { get; set; }
+        public string MADVQL { get; set; }
         public string MAKVHC { get; set; }
         public string CAPDA { get; set; }
         public string MATRAM { get; set; }

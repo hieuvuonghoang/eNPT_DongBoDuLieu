@@ -2,6 +2,7 @@
 using eNPT_DongBoDuLieu.Models.DataBases.EVNNPT;
 using eNPT_DongBoDuLieu.Models.GISSystemInfor;
 using eNPT_DongBoDuLieu.Services;
+using eNPT_DongBoDuLieu.Services.DataBases;
 using eNPT_DongBoDuLieu.Services.Datas;
 using eNPT_DongBoDuLieu.Services.Portals;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,7 @@ namespace eNPT_DongBoDuLieu
 
                     services.AddSingleton<IDataServices, DataServices>();
                     services.AddSingleton<IPortalServices, PortalServices>();
+                    services.AddSingleton<IDataBaseServices, DataBaseServices>();
 
                 })
                 .Build()
