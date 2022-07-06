@@ -55,9 +55,9 @@ namespace eNPT_DongBoDuLieu.Services
                     //Get MaxRecordPerPage
                     var maxRecordPerPage = _appSettings.MaxRecordPerPage;
                     //Đồng bộ dữ liệu Cột điện
-                    await RunAsync(resultGenToken.token, ELoaiDT.COT, lastEditDate);
+                    //await RunAsync(resultGenToken.token, ELoaiDT.COT, lastEditDate);
                     //Đồng bộ dữ liệu Đường dây điện
-                    //await RunAsync(resultGenToken.token, ELoaiDT.DDA, lastEditDate);
+                    await RunAsync(resultGenToken.token, ELoaiDT.DDA, lastEditDate);
                     //Đồng bộ dữ liệu Trạm biến áp
                     //await RunAsync(resultGenToken.token, ELoaiDT.TBA, lastEditDate);
                     //Write Data LastEditDate To File

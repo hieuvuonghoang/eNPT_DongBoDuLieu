@@ -10,7 +10,7 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
         public string TEN_CONGTY { get; set; }
         public string LOAI_TRAM { get; set; }
         public string TEN_TRAM { get; set; }
-        public decimal? LONG { get; set; }
+        public decimal? LONG_ { get; set; }
         public decimal? LAT { get; set; }
         public string KIEU_TRAM { get; set; }
         public string TINH { get; set; }
