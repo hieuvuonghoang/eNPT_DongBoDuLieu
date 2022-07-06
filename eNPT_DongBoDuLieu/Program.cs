@@ -23,6 +23,7 @@ namespace eNPT_DongBoDuLieu
         static async Task Main(string[] args)
         {
             await Host.CreateDefaultBuilder(args)
+                .UseWindowsService()
                 .UseSerilog()
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -38,7 +39,7 @@ namespace eNPT_DongBoDuLieu
                     });
 
                     services.AddDbContext<ModelContext>(options => options.UseOracle(hostContext.Configuration.GetConnectionString("EVNNPT_Database")), ServiceLifetime.Singleton);
-
+                    
                     services.AddHostedService<Worker>();
 
                     services.AddSingleton<IDataServices, DataServices>();
@@ -59,5 +60,6 @@ namespace eNPT_DongBoDuLieu
             Console.WriteLine($"    + Subject: {certificate.Subject}");
             return true;
         }
+
     }
 }

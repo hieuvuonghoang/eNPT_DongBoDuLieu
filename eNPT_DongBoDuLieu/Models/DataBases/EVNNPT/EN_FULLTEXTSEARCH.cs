@@ -13,6 +13,6 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
         public string OBJECTID { get; set; }
         public string MADT { get; set; }
         public string TENDT { get; set; }
-        public string MADV { get; set; }
+        public string MADVQL { get; set; }
     }
 }

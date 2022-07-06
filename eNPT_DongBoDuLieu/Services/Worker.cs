@@ -23,12 +23,10 @@ namespace eNPT_DongBoDuLieu.Services
         private readonly IDataServices _dataServices;
         private readonly IPortalServices _portalServices;
         private readonly IDataBaseServices _dataBaseServices;
-        private readonly ModelContext _context;
 
         public Worker(
             ILogger<Worker> logger, 
             IOptions<AppSettings> appSettings,
-            ModelContext context,
             IDataServices dataServices,
             IPortalServices portalServices,
             IDataBaseServices dataBaseServices)
@@ -38,7 +36,6 @@ namespace eNPT_DongBoDuLieu.Services
             _dataServices = dataServices;
             _portalServices = portalServices;
             _dataBaseServices = dataBaseServices;
-            _context = context;
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)
@@ -49,7 +46,7 @@ namespace eNPT_DongBoDuLieu.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while(!stoppingToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 try
                 {
@@ -100,7 +97,7 @@ namespace eNPT_DongBoDuLieu.Services
             try
             {
                 _logger.LogInformation($"Thực hiện đồng bộ dữ liệu đối tượng {loaiDT}...");
-                var countRecord = await _portalServices.GetCountByLastEditTimeAsync(token, ELoaiDT.COT, lastEditDate);
+                var countRecord = await _portalServices.GetCountByLastEditTimeAsync(token, loaiDT, lastEditDate);
                 var maxRecordPerPage = _appSettings.MaxRecordPerPage;
                 if (countRecord != 0)
                 {
@@ -110,13 +107,11 @@ namespace eNPT_DongBoDuLieu.Services
                     {
                         nPage++;
                     }
-                    //List<string> strFeaturess = new List<string>();
                     for (var i = 0; i < nPage; i++)
                     {
-                        _logger.LogInformation($"Đang đồng bộ dữ liệu loại đối tượng {loaiDT} trang {i + 1} trên tổng số {nPage} trang.");
-                        var strFeatures = await _portalServices.GetFeatureAsyncs(token, ELoaiDT.COT, lastEditDate, i * maxRecordPerPage, maxRecordPerPage);
-                        await _dataBaseServices.RemoveAndInsertFullTextSearch(loaiDT, strFeatures);
-                        //strFeaturess.Add(strFeatures);
+                        _logger.LogInformation($"Đang đồng bộ dữ liệu loại đối tượng {loaiDT} trang {i + 1} trên tổng số {nPage} trang...");
+                        var strFeatures = await _portalServices.GetFeatureAsyncs(token, loaiDT, lastEditDate, i * maxRecordPerPage, maxRecordPerPage);
+                        await _dataBaseServices.DeleteAndInsertFullTextSearchAsync(loaiDT, strFeatures);
                     }
                 } else
                 {

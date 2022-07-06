@@ -1,4 +1,6 @@
-﻿using System;
+﻿using eNPT_DongBoDuLieu.Models.JsonConverts;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -39,6 +41,7 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
         public string DENTRAM { get; set; }
         public string TENDUONGDAYCHINH { get; set; }
         public string MATTDKV { get; set; }
+        [JsonConverter(typeof(CustomDateTimeUtcConverter))]
         public DateTime? NAM_VH { get; set; }
     }
 }

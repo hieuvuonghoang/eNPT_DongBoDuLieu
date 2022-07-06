@@ -271,7 +271,7 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
 
                 entity.HasIndex(e => e.DATA, "EN_FULLTEXTSEARCH_IDX");
 
-                entity.HasIndex(e => e.MADV, "EN_FULLTEXTSEARCH_MADV_IDX");
+                entity.HasIndex(e => e.MADVQL, "EN_FULLTEXTSEARCH_MADV_IDX");
 
                 entity.HasIndex(e => new { e.LOAIDT, e.OBJECTID }, "EN_FULLTEXTSEARCH_UPDATE_IDX");
 
@@ -289,7 +289,7 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.MADV)
+                entity.Property(e => e.MADVQL)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
