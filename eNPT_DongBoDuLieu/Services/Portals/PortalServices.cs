@@ -141,7 +141,7 @@ namespace eNPT_DongBoDuLieu.Services.Portals
                 formdata.Add(new StringContent($"{resultOffset}"), "resultOffset");
                 formdata.Add(new StringContent($"{resultRecordCount}"), "resultRecordCount");
                 formdata.Add(new StringContent("*"), "outFields");
-                formdata.Add(new StringContent($"{_appSettings.FieldName} DESC"), "orderByFields");
+                //formdata.Add(new StringContent($"{_appSettings.FieldName} DESC"), "orderByFields");
                 formdata.Add(new StringContent("json"), "f");
 
                 var request = new HttpRequestMessage(HttpMethod.Post, $"{linkFeatureService}/query");

@@ -24,6 +24,7 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

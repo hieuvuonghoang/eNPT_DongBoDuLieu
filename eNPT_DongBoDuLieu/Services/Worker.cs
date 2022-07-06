@@ -1,5 +1,4 @@
 ﻿using eNPT_DongBoDuLieu.Models;
-using eNPT_DongBoDuLieu.Models.DataBases.EVNNPT;
 using eNPT_DongBoDuLieu.Models.Services;
 using eNPT_DongBoDuLieu.Services.DataBases;
 using eNPT_DongBoDuLieu.Services.Datas;
@@ -8,9 +7,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -61,9 +57,9 @@ namespace eNPT_DongBoDuLieu.Services
                     //Đồng bộ dữ liệu Cột điện
                     await RunAsync(resultGenToken.token, ELoaiDT.COT, lastEditDate);
                     //Đồng bộ dữ liệu Đường dây điện
-                    await RunAsync(resultGenToken.token, ELoaiDT.DDA, lastEditDate);
+                    //await RunAsync(resultGenToken.token, ELoaiDT.DDA, lastEditDate);
                     //Đồng bộ dữ liệu Trạm biến áp
-                    await RunAsync(resultGenToken.token, ELoaiDT.TBA, lastEditDate);
+                    //await RunAsync(resultGenToken.token, ELoaiDT.TBA, lastEditDate);
                     //Write Data LastEditDate To File
                     await _dataServices.WriteDataAsync(lastEditDate);
                 }
@@ -107,11 +103,13 @@ namespace eNPT_DongBoDuLieu.Services
                     {
                         nPage++;
                     }
+                    var resultOffset = 0;
                     for (var i = 0; i < nPage; i++)
                     {
                         _logger.LogInformation($"Đang đồng bộ dữ liệu loại đối tượng {loaiDT} trang {i + 1} trên tổng số {nPage} trang...");
-                        var strFeatures = await _portalServices.GetFeatureAsyncs(token, loaiDT, lastEditDate, i * maxRecordPerPage, maxRecordPerPage);
+                        var strFeatures = await _portalServices.GetFeatureAsyncs(token, loaiDT, lastEditDate, resultOffset, maxRecordPerPage);
                         await _dataBaseServices.DeleteAndInsertFullTextSearchAsync(loaiDT, strFeatures);
+                        resultOffset = ((i + 1) * maxRecordPerPage) + 1;
                     }
                 } else
                 {

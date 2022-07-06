@@ -38,7 +38,8 @@ namespace eNPT_DongBoDuLieu
                         ServerCertificateCustomValidationCallback = ValidateServerCertificattion
                     });
 
-                    services.AddDbContext<ModelContext>(options => options.UseOracle(hostContext.Configuration.GetConnectionString("EVNNPT_Database")), ServiceLifetime.Singleton);
+                    services.AddDbContext<ModelContext>
+                    (options => options.UseOracle(hostContext.Configuration.GetConnectionString("EVNNPT_Database")), ServiceLifetime.Singleton);
                     
                     services.AddHostedService<Worker>();
 
