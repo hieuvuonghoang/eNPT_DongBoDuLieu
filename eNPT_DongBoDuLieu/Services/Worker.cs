@@ -54,12 +54,12 @@ namespace eNPT_DongBoDuLieu.Services
                         $"{lastEditDate.NgayGioHienTai.ToString("yyyy-MM-dd HH:mm:ss")}]");
                     //Get MaxRecordPerPage
                     var maxRecordPerPage = _appSettings.MaxRecordPerPage;
-                    //Đồng bộ dữ liệu Cột điện
-                    //await RunAsync(resultGenToken.token, ELoaiDT.COT, lastEditDate);
                     //Đồng bộ dữ liệu Đường dây điện
                     await RunAsync(resultGenToken.token, ELoaiDT.DDA, lastEditDate);
                     //Đồng bộ dữ liệu Trạm biến áp
-                    //await RunAsync(resultGenToken.token, ELoaiDT.TBA, lastEditDate);
+                    await RunAsync(resultGenToken.token, ELoaiDT.TBA, lastEditDate);
+                    //Đồng bộ dữ liệu Cột điện
+                    await RunAsync(resultGenToken.token, ELoaiDT.COT, lastEditDate);
                     //Write Data LastEditDate To File
                     await _dataServices.WriteDataAsync(lastEditDate);
                 }
