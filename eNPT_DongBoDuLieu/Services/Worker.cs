@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,22 +48,35 @@ namespace eNPT_DongBoDuLieu.Services
             {
                 try
                 {
+                    _logger.LogInformation($"Bắt đầu đồng bộ dữ liệu: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}.");
+
                     //Get Token
                     var resultGenToken = await _portalServices.GenerateTokenAsync();
+
+                    #region "Cập nhật dữ liệu"
                     //Read Data LastEditDate From File
                     var lastEditDate = await _dataServices.ReadDataAsync();
-                    _logger.LogInformation($"Khoảng thời gian thực hiện truy vấn: [{lastEditDate.NgayGio.ToString("yyyy-MM-dd HH:mm:ss")}, " +
-                        $"{lastEditDate.NgayGioHienTai.ToString("yyyy-MM-dd HH:mm:ss")}]");
-                    //Get MaxRecordPerPage
-                    var maxRecordPerPage = _appSettings.MaxRecordPerPage;
-                    //Đồng bộ dữ liệu Đường dây điện
+                    //Cập nhật dữ liệu Đường dây điện được chỉnh sửa
                     await RunAsync(resultGenToken.token, ELoaiDT.DDA, lastEditDate);
-                    //Đồng bộ dữ liệu Trạm biến áp
+                    //Cập nhật dữ liệu Trạm biến áp được chỉnh sửa
                     await RunAsync(resultGenToken.token, ELoaiDT.TBA, lastEditDate);
-                    //Đồng bộ dữ liệu Cột điện
+                    //Cập nhật dữ liệu Cột điện được chỉnh sửa
                     await RunAsync(resultGenToken.token, ELoaiDT.COT, lastEditDate);
+
                     //Write Data LastEditDate To File
                     await _dataServices.WriteDataAsync(lastEditDate);
+                    #endregion
+
+                    #region "Xóa dữ liệu"
+                    //Xóa dữ liệu Đường dây điện không còn tồn tại
+                    await RunDeleteAsync(resultGenToken.token, ELoaiDT.DDA);
+                    //Xóa dữ liệu Trạm biến áp không còn tồn tại
+                    await RunDeleteAsync(resultGenToken.token, ELoaiDT.TBA);
+                    //Xóa dữ liệu Cột điện không còn tồn tại
+                    await RunDeleteAsync(resultGenToken.token, ELoaiDT.COT);
+                    #endregion
+
+                    _logger.LogInformation($"Hoàn thành đồng bộ dữ liệu: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}.");
                 }
                 catch (Exception ex)
                 {
@@ -84,8 +99,8 @@ namespace eNPT_DongBoDuLieu.Services
         /// Hàm thực hiện đồng bộ dữ liệu từng loại đối tượng.
         /// </summary>
         /// <param name="token"></param>
-        /// <param name="loaiDT"></param>
-        /// <param name="lastEditDate"></param>
+        /// <param name="loaiDT">Loại đối tượng</param>
+        /// <param name="lastEditDate">Thời gian</param>
         /// <returns></returns>
         /// <exception cref="Không ném ra bất kỳ ngoại lệ nào. Chỉ ghi log Err."></exception>
         private async Task RunAsync(string token, ELoaiDT loaiDT, LastEditDate lastEditDate)
@@ -111,9 +126,6 @@ namespace eNPT_DongBoDuLieu.Services
                         await _dataBaseServices.DeleteAndInsertFullTextSearchAsync(loaiDT, strFeatures);
                         resultOffset = ((i + 1) * maxRecordPerPage) + 1;
                     }
-                } else
-                {
-                    _logger.LogInformation($"Loại đối tượng {loaiDT}. Không có bản ghi nào được cập nhật.");
                 }
             } catch(Exception ex)
             {
@@ -122,5 +134,61 @@ namespace eNPT_DongBoDuLieu.Services
             }
         }
 
+        /// <summary>
+        /// Hàm thực hiện xóa dữ liệu không tồn tại trên Feature
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="loaiDT">Loại đối tượng</param>
+        /// <returns></returns>
+        private async Task RunDeleteAsync(string token, ELoaiDT loaiDT)
+        {
+            try
+            {
+                _logger.LogInformation($"Thực hiện xóa dữ liệu đối tượng {loaiDT}...");
+                var countRecord = await _dataBaseServices.GetCountByLoaiDTFullTextSearchAsync(loaiDT);
+                var maxRecordPerPage = _appSettings.MaxRecordPerPage;
+                if (countRecord != 0)
+                {
+                    _logger.LogInformation($"Loại đối tượng {loaiDT}. Có {countRecord} bản ghi cần được kiểm tra.");
+                    var nPage = countRecord / maxRecordPerPage;
+                    if (countRecord % _appSettings.MaxRecordPerPage != 0)
+                    {
+                        nPage++;
+                    }
+                    for (var i = 0; i < nPage; i++)
+                    {
+                        _logger.LogInformation($"Đang kiểm tra dữ liệu loại đối tượng {loaiDT} trang {i + 1} trên tổng số {nPage} trang...");
+                        //Danh sách OID cần kiểm tra xem còn tồn tại trên Feature hay không
+                        var objectIds = await _dataBaseServices.GetObjectIDFullTextSearchAsyncs(loaiDT, (i * maxRecordPerPage) + 1, ((i + 1) * maxRecordPerPage));
+                        if(objectIds.Count != 0)
+                        {
+                            //Danh sách OID còn tồn tại
+                            var objectIdFeatures = await _portalServices.GetObjectIDByOIDAsyncs(token, loaiDT, objectIds);
+                            var dicObjectIDFeatures = objectIdFeatures
+                                .Select(it => new { Key = $"{it}", Value = it })
+                                .ToDictionary(it => it.Key, it => it.Value);
+                            //Danh sách OBJECTID sẽ không còn tồn tại trên Feature, cần xóa trong EN_FULLTEXTSEARCH, EN_COTDIEN, EN_DUONGDAY, EN_TRAMBIENAP
+                            var objectIDDeletes = new List<string>();
+                            foreach (var oId in objectIds)
+                            {
+                                if (!dicObjectIDFeatures.ContainsKey(oId))
+                                {
+                                    objectIDDeletes.Add(oId);
+                                }
+                            }
+                            if(objectIDDeletes.Count != 0)
+                            {
+                                //Xóa dữ liệu
+                                await _dataBaseServices.DeleteFullTextSearchCotTramDuongDayAsync(loaiDT, objectIDDeletes);
+                            }
+                        }
+                    }
+                }
+            } catch(Exception ex)
+            {
+                //Chỉ ghi log lỗi, không ném ngoại lệ.
+                _logger.LogError(ex.Message, ex);
+            }
+        }
     }
 }

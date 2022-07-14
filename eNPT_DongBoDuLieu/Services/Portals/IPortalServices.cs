@@ -1,5 +1,6 @@
 ﻿using eNPT_DongBoDuLieu.Models.Portals;
 using eNPT_DongBoDuLieu.Models.Services;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace eNPT_DongBoDuLieu.Services.Portals
@@ -38,5 +39,12 @@ namespace eNPT_DongBoDuLieu.Services.Portals
         /// <exception cref="..."></exception>
         Task<string> GetFeatureAsyncs(string token, ELoaiDT loaiDT, LastEditDate lastEditDate, int resultOffset, int resultRecordCount);
 
+        /// <summary>
+        /// Get ObjectID
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="loaiDT"></param>
+        /// <returns></returns>
+        Task<List<int>> GetObjectIDByOIDAsyncs(string token, ELoaiDT loaiDT, List<string> oIds);
     }
 }

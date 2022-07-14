@@ -8,9 +8,9 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
     public partial class EN_DUONGDAY
     {
         /// <summary>
-        /// Trường dữ liệu được thêm vào phục vụ xử lý dữ liệu, không tồn tại trong CSDL.
+        /// Mã đường dây update từ gdb
         /// </summary>
         [NotMapped]
-        public int OBJECTID { get; set; }
+        public string MADUONGDAY_UPDATE { get; set; }
     }
 }

@@ -2,9 +2,9 @@
   "profiles": {
     "eNPT_DongBoDuLieu": {
       "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\vuong\\Desktop\\eNPT\\eNPT_DongBoDuLieu\\eNPT_DongBoDuLieu\\bin\\Debug\\netcoreapp3.1",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
-        //"DOTNET_ENVIRONMENT": "Production"
       }
     }
   }

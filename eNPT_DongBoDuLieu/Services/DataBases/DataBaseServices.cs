@@ -23,6 +23,18 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
         private readonly string _insertTramBienAp;
         private readonly string _insertDuongDay;
         private readonly string _insertFullTextSearch;
+        private readonly string _updateMaCotDayDan;
+        private readonly string _updateMaCotDuongDayCot;
+        private readonly string _updateMaTramTramBienApDuongDay;
+        private readonly string _updateMaDuongDayDayDan;
+        private readonly string _updateMaDuongDayTramBienApDuongDay;
+        private readonly string _updateMaDuongDayDuongDayCot;
+        private readonly string _getCountByLoaiDTFullTextSearch;
+        private readonly string _getObjectIDFullTextSearch;
+        private readonly string _deleteFullTextSearch;
+        private readonly string _deleteCotDien;
+        private readonly string _deleteTramBienAp;
+        private readonly string _deleteDuongDay;
 
         public DataBaseServices(
             ILogger<DataBaseServices> logger,
@@ -40,37 +52,37 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                                MAKVHC, CAPDA, TEN_TTD, 
                                MAVITRI, TENVITRI, MATIEPDIA, 
                                TEN_COT, MA_DCS, MACT, 
-                               TENCT, MATTDKV) 
+                               TENCT, MATTDKV, OBJECTID) 
                                VALUES (:MA_COT, :LONG_, :LAT, 
-                                       :CONGDUNGCOT, :CHIEUCAO, :THUTU_PHA,
-                                       :SOMACH_DD, :TRONGLUONG, :SOHUU,
-                                       :SOMACH_DCS, :LOAI_MC, :LOAI_BLNM,
+                                       :CONGDUNGCOT, :CHIEUCAO, :THUTU_PHA, 
+                                       :SOMACH_DD, :TRONGLUONG, :SOHUU, 
+                                       :SOMACH_DCS, :LOAI_MC, :LOAI_BLNM, 
                                        :KEMONG, :TINH, :HUYEN, 
                                        :XA, :LOAI_TD, :MADVQL, 
                                        :MAKVHC, :CAPDA, :TEN_TTD, 
-                                       :MAVITRI, :TENVITRI, :MATIEPDIA,
+                                       :MAVITRI, :TENVITRI, :MATIEPDIA, 
                                        :TEN_COT, :MA_DCS, :MACT, 
-                                       :TENCT, :MATTDKV)";
-            _insertFullTextSearch = @"INSERT INTO EVNNPT.EN_FULLTEXTSEARCH (
+                                       :TENCT, :MATTDKV, :OBJECTID)";
+            _insertFullTextSearch = @"INSERT INTO EVNNPT.EN_FULLTEXTSEARCH ( 
                                       FTSID, LOAIDT, DATA, 
                                       OBJECTID, MADT, TENDT, 
                                       MADVQL) 
-                                      VALUES (:FTSID, :LOAIDT, :DATA,
-                                              :OBJECTID, :MADT, :TENDT,
+                                      VALUES (:FTSID, :LOAIDT, :DATA, 
+                                              :OBJECTID, :MADT, :TENDT, 
                                               :MADVQL)";
-            _insertTramBienAp = @"INSERT INTO EVNNPT.EN_TRAMBIENAP (
+            _insertTramBienAp = @"INSERT INTO EVNNPT.EN_TRAMBIENAP ( 
                                   TEN_CONGTY, LOAI_TRAM, TEN_TRAM, 
                                   LONG_, LAT, KIEU_TRAM, 
                                   TINH, HUYEN, XA, 
                                   NAM_VH, TEN_TTD, MADVQL, 
                                   MAKVHC, CAPDA, MATRAM, 
-                                  SOHUU, MATTDKV) 
-                                  VALUES (:TEN_CONGTY, :LOAI_TRAM, :TEN_TRAM,
-                                          :LONG_, :LAT, :KIEU_TRAM,
-                                          :TINH, :HUYEN, :XA,
-                                          :NAM_VH, :TEN_TTD, :MADVQL,
-                                          :MAKVHC, :CAPDA, :MATRAM,
-                                          :SOHUU, :MATTDKV )";
+                                  SOHUU, MATTDKV, OBJECTID) 
+                                  VALUES (:TEN_CONGTY, :LOAI_TRAM, :TEN_TRAM, 
+                                          :LONG_, :LAT, :KIEU_TRAM, 
+                                          :TINH, :HUYEN, :XA, 
+                                          :NAM_VH, :TEN_TTD, :MADVQL, 
+                                          :MAKVHC, :CAPDA, :MATRAM, 
+                                          :SOHUU, :MATTDKV, :OBJECTID)";
             _insertDuongDay = @"INSERT INTO EVNNPT.EN_DUONGDAY (
                                 MADUONGDAY, TENDUONGDAY, CHIEUDAI_DD, 
                                 GHICHU, MADVQL, MADUONGDAYCHINH, 
@@ -82,7 +94,7 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                                 SOLUONG, SOLUONG_MN, SOLUONG_KDV, 
                                 SOLUONG_TBCB, DUONGDAY, VITRIDAT, 
                                 CAPDA, TUTRAM, DENTRAM, 
-                                TENDUONGDAYCHINH, MATTDKV, NAM_VH) 
+                                TENDUONGDAYCHINH, MATTDKV, NAM_VH, OBJECTID) 
                                 VALUES (:MADUONGDAY, :TENDUONGDAY, :CHIEUDAI_DD,
                                         :GHICHU, :MADVQL, :MADUONGDAYCHINH,
                                         :TEN_TTD, :TEN_CONGTY, :HANG_SX,
@@ -93,7 +105,201 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                                         :SOLUONG, :SOLUONG_MN, :SOLUONG_KDV,
                                         :SOLUONG_TBCB, :DUONGDAY, :VITRIDAT,
                                         :CAPDA, :TUTRAM, :DENTRAM,
-                                        :TENDUONGDAYCHINH, :MATTDKV, :NAM_VH)";
+                                        :TENDUONGDAYCHINH, :MATTDKV, :NAM_VH, :OBJECTID)";
+            _updateMaCotDayDan = @"UPDATE EVNNPT.EN_DAYDAN 
+                              SET MA_COT = :MA_COT_VALUE 
+                              WHERE MA_COT = :MA_COT_CONDITION";
+            _updateMaCotDuongDayCot = @"UPDATE EVNNPT.EN_DUONGDAY_COT 
+                                   SET MA_COT = :MA_COT_VALUE 
+                                   WHERE MA_COT = :MA_COT_CONDITION";
+            _updateMaTramTramBienApDuongDay = @"UPDATE EVNNPT.EN_TRAMBIENAP_DUONGDAY 
+                                   SET MATRAM = :MATRAM_VALUE 
+                                   WHERE MATRAM = :MATRAM_CONDITION";
+            _updateMaDuongDayDayDan = @"UPDATE EVNNPT.EN_DAYDAN 
+                              SET MADUONGDAY = :MADUONGDAY_VALUE 
+                              WHERE MADUONGDAY = :MADUONGDAY_CONDITION";
+            _updateMaDuongDayTramBienApDuongDay = @"UPDATE EVNNPT.EN_TRAMBIENAP_DUONGDAY 
+                                   SET MADUONGDAY = :MADUONGDAY_VALUE 
+                                   WHERE MADUONGDAY = :MADUONGDAY_CONDITION";
+            _updateMaDuongDayDuongDayCot = @"UPDATE EVNNPT.EN_DUONGDAY_COT 
+                                   SET MADUONGDAY = :MADUONGDAY_VALUE 
+                                   WHERE MADUONGDAY = :MADUONGDAY_CONDITION";
+            _getCountByLoaiDTFullTextSearch = @"SELECT COUNT(FTSID) 
+                                                FROM EVNNPT.EN_FULLTEXTSEARCH WHERE LOAIDT = :LOAIDT";
+            _getObjectIDFullTextSearch = @"SELECT OBJECTID FROM (SELECT OBJECTID, ROWNUM AS RN FROM EVNNPT.EN_FULLTEXTSEARCH 
+                                           WHERE LOAIDT = :LOAIDT ORDER BY FTSID) WHERE RN BETWEEN :RNSTART AND :RNEND";
+            _deleteFullTextSearch = @"DELETE FROM EVNNPT.EN_FULLTEXTSEARCH WHERE LOAIDT = :LOAIDT AND OBJECTID = :OBJECTID";
+            _deleteCotDien = @"DELETE FROM EVNNPT.EN_COTDIEN WHERE OBJECTID = :OBJECTID";
+            _deleteTramBienAp = @"DELETE FROM EVNNPT.EN_TRAMBIENAP WHERE OBJECTID = :OBJECTID";
+            _deleteDuongDay = @"DELETE FROM EVNNPT.EN_DUONGDAY WHERE OBJECTID = :OBJECTID";
+        }
+
+        public async Task DeleteFullTextSearchCotTramDuongDayAsync(ELoaiDT loaiDT, List<string> oIds)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    await _context.Database.OpenConnectionAsync();
+
+                    var transaction = await command.Connection.BeginTransactionAsync();
+
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.CommandText = _deleteFullTextSearch;
+                    command.Transaction = transaction;
+
+                    DbParameter LOAIDT = command.CreateParameter();
+                    LOAIDT.DbType = DbType.String;
+                    LOAIDT.ParameterName = "LOAIDT";
+                    command.Parameters.Add(LOAIDT);
+
+                    DbParameter OBJECTID = command.CreateParameter();
+                    OBJECTID.DbType = DbType.String;
+                    OBJECTID.ParameterName = "OBJECTID";
+                    command.Parameters.Add(OBJECTID);
+
+                    var numRowDelete = 0;
+
+                    foreach (var oId in oIds)
+                    {
+                        LOAIDT.Value = $"{loaiDT}";
+                        OBJECTID.Value = oId;
+                        try
+                        {
+                            numRowDelete += await command.ExecuteNonQueryAsync();
+                        } catch (Exception ex)
+                        {
+                            _logger.LogWarning($"Lỗi khi xóa dữ liệu FullTextSearch LOAIDT = {loaiDT}, OBJECTID = {oId}.");
+                            _logger.LogError(ex.Message, ex);
+                        }
+                    }
+
+                    switch(loaiDT)
+                    {
+                        case ELoaiDT.COT:
+                            command.CommandText = _deleteCotDien;
+                            break;
+                        case ELoaiDT.DDA:
+                            command.CommandText = _deleteDuongDay;
+                            break;
+                        case ELoaiDT.TBA:
+                            command.CommandText = _deleteTramBienAp;
+                            break;
+                    }
+
+                    command.Parameters.Clear();
+
+                    DbParameter dOBJECTID = command.CreateParameter();
+                    dOBJECTID.DbType = DbType.Decimal;
+                    dOBJECTID.ParameterName = "OBJECTID";
+                    command.Parameters.Add(dOBJECTID);
+
+                    var numRowDeleteCotTramDuongDay = 0;
+
+                    foreach (var oId in oIds)
+                    {
+                        dOBJECTID.Value = oId;
+                        try
+                        {
+                            numRowDeleteCotTramDuongDay += await command.ExecuteNonQueryAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning($"Lỗi khi xóa cột, trạm, hoặc đường dây: LOAIDT = {loaiDT}, OBJECTID = {oId}.");
+                            _logger.LogError(ex.Message, ex);
+                        }
+                    }
+
+                    await transaction.CommitAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+            }
+        }
+
+        public async Task<List<string>> GetObjectIDFullTextSearchAsyncs(ELoaiDT loaiDT, int rNStart, int rNEnd)
+        {
+            var rets = new List<string>();
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    await _context.Database.OpenConnectionAsync();
+
+                    command.CommandType = System.Data.CommandType.Text;
+
+                    command.CommandText = _getObjectIDFullTextSearch;
+
+                    DbParameter LOAIDT = command.CreateParameter();
+                    LOAIDT.DbType = DbType.String;
+                    LOAIDT.ParameterName = "LOAIDT";
+                    command.Parameters.Add(LOAIDT);
+
+                    DbParameter RNSTART = command.CreateParameter();
+                    RNSTART.DbType = DbType.Int32;
+                    RNSTART.ParameterName = "RNSTART";
+                    command.Parameters.Add(RNSTART);
+
+                    DbParameter RNEND = command.CreateParameter();
+                    RNEND.DbType = DbType.Int32;
+                    RNEND.ParameterName = "RNEND";
+                    command.Parameters.Add(RNEND);
+
+                    LOAIDT.Value = $"{loaiDT}";
+                    RNSTART.Value = rNStart;
+                    RNEND.Value = rNEnd;
+
+                    using (var result = await command.ExecuteReaderAsync())
+                    {
+                        while (result.Read())
+                        {
+                            var objectId = result.GetString(0);
+                            rets.Add(objectId);
+                        }
+                    }
+                }
+            } catch(Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+            }
+            return rets;
+        }
+
+        public async Task<int> GetCountByLoaiDTFullTextSearchAsync(ELoaiDT loaiDT)
+        {
+            var ret = 0;
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    await _context.Database.OpenConnectionAsync();
+
+                    command.CommandType = System.Data.CommandType.Text;
+
+                    command.CommandText = _getCountByLoaiDTFullTextSearch;
+
+                    DbParameter LOAIDT = command.CreateParameter();
+                    LOAIDT.DbType = DbType.String;
+                    LOAIDT.ParameterName = "LOAIDT";
+                    command.Parameters.Add(LOAIDT);
+
+                    LOAIDT.Value = $"{loaiDT}";
+
+                    using (var result = await command.ExecuteReaderAsync())
+                    {
+                        while (result.Read())
+                        {
+                            ret = result.GetInt32(0);
+                        }
+                    }
+                }
+            } catch(Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+            }
+            return ret;
         }
 
         public async Task DeleteAddInsertFeaturesAsync(ELoaiDT loaiDT, List<EN_FULLTEXTSEARCH> fullTextSearchs)
@@ -104,6 +310,7 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                 var sQLDelete = "";
                 var tableName = "";
                 var dicPK = new Dictionary<string, EN_FULLTEXTSEARCH>();
+                var dicObjectId = new Dictionary<decimal, EN_FULLTEXTSEARCH>();
                 switch (loaiDT)
                 {
                     case ELoaiDT.COT:
@@ -114,10 +321,31 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                             {
                                 dicPK.Add(fullTextSearch.CotDien.MA_COT, fullTextSearch);
                             }
+                            var objectId = fullTextSearch.CotDien.OBJECTID;
+                            if (objectId != null && !dicObjectId.ContainsKey(objectId.Value))
+                            {
+                                dicObjectId.Add(objectId.Value, fullTextSearch);
+                            }
                         }
-                        pKTables = string.Join(",", dicPK.Keys.Select(it => $"'{it}'").ToList());
-                        sQLDelete = $"DELETE FROM {tableName} WHERE MA_COT IN ({pKTables})";
-                        await DeleteAndInsertCotDien(dicPK.Values.Select(it => it.CotDien).ToList(), sQLDelete);
+                        var cotDiens = dicPK.Values.Select(it => it.CotDien).ToList();
+                        //Danh sách cột điện có mã cột bị chỉnh sửa
+                        var cotDienMaCotUpdates = await GetMaCotByObjectId(cotDiens);
+                        foreach (var cotDienMaCotUpdate in cotDienMaCotUpdates)
+                        {
+                            if (cotDienMaCotUpdate.OBJECTID == null)
+                            {
+                                continue;
+                            }
+                            var objectId = cotDienMaCotUpdate.OBJECTID.Value;
+                            if (dicObjectId.ContainsKey(objectId))
+                            {
+                                var fullTextSearch = dicObjectId[objectId];
+                                cotDienMaCotUpdate.MA_COT_UPDATE = fullTextSearch.CotDien.MA_COT;
+                            }
+                        }
+                        pKTables = string.Join(",", dicPK.Values.Select(it => $"'{it.CotDien.OBJECTID}'").ToList());
+                        sQLDelete = $"DELETE FROM {tableName} WHERE OBJECTID IN ({pKTables})";
+                        await DeleteAndInsertCotDien(cotDiens, sQLDelete, cotDienMaCotUpdates);
                         break;
                     case ELoaiDT.DDA:
                         tableName = "EN_DUONGDAY";
@@ -128,9 +356,25 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                                 dicPK.Add(fullTextSearch.DuongDay.MADUONGDAY, fullTextSearch);
                             }
                         }
-                        pKTables = string.Join(",", fullTextSearchs.Select(it => $"'{it.DuongDay.MADUONGDAY}'").ToList());
-                        sQLDelete = $"DELETE FROM {tableName} WHERE MADUONGDAY IN ({pKTables})";
-                        await DeleteAndInsertDuongDay(dicPK.Values.Select(it => it.DuongDay).ToList(), sQLDelete);
+                        var duongDays = dicPK.Values.Select(it => it.DuongDay).ToList();
+                        //Danh sách đường dây có mã đường dây bị chỉnh sửa
+                        var duongDayMaDuongDayUpdates = await GetMaDuongDayByObjectId(duongDays);
+                        foreach (var duongDayMaDuongDayUpdate in duongDayMaDuongDayUpdates)
+                        {
+                            if (duongDayMaDuongDayUpdate.OBJECTID == null)
+                            {
+                                continue;
+                            }
+                            var objectId = duongDayMaDuongDayUpdate.OBJECTID.Value;
+                            if (dicObjectId.ContainsKey(objectId))
+                            {
+                                var fullTextSearch = dicObjectId[objectId];
+                                duongDayMaDuongDayUpdate.MADUONGDAY_UPDATE = fullTextSearch.DuongDay.MADUONGDAY;
+                            }
+                        }
+                        pKTables = string.Join(",", fullTextSearchs.Select(it => $"'{it.DuongDay.OBJECTID}'").ToList());
+                        sQLDelete = $"DELETE FROM {tableName} WHERE OBJECTID IN ({pKTables})";
+                        await DeleteAndInsertDuongDay(duongDays, sQLDelete, duongDayMaDuongDayUpdates);
                         break;
                     case ELoaiDT.TBA:
                         tableName = "EN_TRAMBIENAP";
@@ -140,10 +384,31 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                             {
                                 dicPK.Add(fullTextSearch.TramBienAp.MATRAM, fullTextSearch);
                             }
+                            var objectId = fullTextSearch.TramBienAp.OBJECTID;
+                            if (objectId != null && !dicObjectId.ContainsKey(objectId.Value))
+                            {
+                                dicObjectId.Add(objectId.Value, fullTextSearch);
+                            }
                         }
-                        pKTables = string.Join(",", fullTextSearchs.Select(it => $"'{it.TramBienAp.MATRAM}'").ToList());
-                        sQLDelete = $"DELETE FROM {tableName} WHERE MATRAM IN ({pKTables})";
-                        await DeleteAndInsertTramBienAp(dicPK.Values.Select(it => it.TramBienAp).ToList(), sQLDelete);
+                        var tramBienAps = dicPK.Values.Select(it => it.TramBienAp).ToList();
+                        //Danh sách trạm biến áp có mã trạm bị chỉnh sửa
+                        var tramBienApMaTramUpdates = await GetMaTramByObjectId(tramBienAps);
+                        foreach (var tramBienApMaTramUpdate in tramBienApMaTramUpdates)
+                        {
+                            if (tramBienApMaTramUpdate.OBJECTID == null)
+                            {
+                                continue;
+                            }
+                            var objectId = tramBienApMaTramUpdate.OBJECTID.Value;
+                            if (dicObjectId.ContainsKey(objectId))
+                            {
+                                var fullTextSearch = dicObjectId[objectId];
+                                tramBienApMaTramUpdate.MATRAM_UPDATE = fullTextSearch.TramBienAp.MATRAM;
+                            }
+                        }
+                        pKTables = string.Join(",", fullTextSearchs.Select(it => $"'{it.TramBienAp.OBJECTID}'").ToList());
+                        sQLDelete = $"DELETE FROM {tableName} WHERE OBJECTID IN ({pKTables})";
+                        await DeleteAndInsertTramBienAp(tramBienAps, sQLDelete, tramBienApMaTramUpdates);
                         break;
                 }
             }
@@ -153,7 +418,7 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
             }
         }
 
-        private async Task DeleteAndInsertCotDien(List<EN_COTDIEN> cotDiens, string sQLDelete)
+        private async Task DeleteAndInsertCotDien(List<EN_COTDIEN> cotDiens, string sQLDelete, List<EN_COTDIEN> cotDienMaCotUpdates)
         {
             try
             {
@@ -323,6 +588,11 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                     maTTDKV.ParameterName = "MATTDKV";
                     command.Parameters.Add(maTTDKV);
 
+                    DbParameter pOBJECTID = command.CreateParameter();
+                    pOBJECTID.DbType = DbType.Decimal;
+                    pOBJECTID.ParameterName = "OBJECTID";
+                    command.Parameters.Add(pOBJECTID);
+
                     #endregion
 
                     var numRowAdd = 0;
@@ -358,23 +628,80 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                         maCT.Value = cotDien.MACT;
                         tenCT.Value = cotDien.TENCT;
                         maTTDKV.Value = cotDien.MATTDKV;
-                        numRowAdd += await command.ExecuteNonQueryAsync();
+                        pOBJECTID.Value = cotDien.OBJECTID;
+                        try
+                        {
+                            numRowAdd += await command.ExecuteNonQueryAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(JsonConvert.SerializeObject(cotDien));
+                            _logger.LogError(ex.Message, ex);
+                        }
                     }
+
+                    #endregion
+
+                    #region "Update dữ liệu các bảng liên quan khi trường MA_COT bị chỉnh sửa"
+
+                    DbParameter MA_COT_VALUE = command.CreateParameter();
+                    MA_COT_VALUE.DbType = DbType.String;
+                    MA_COT_VALUE.ParameterName = "MA_COT_VALUE";
+                    command.Parameters.Add(MA_COT_VALUE);
+
+                    DbParameter MA_COT_CONDITION = command.CreateParameter();
+                    MA_COT_CONDITION.DbType = DbType.String;
+                    MA_COT_CONDITION.ParameterName = "MA_COT_CONDITION";
+                    command.Parameters.Add(MA_COT_CONDITION);
+
+                    #region "EN_DAYDAN"
+
+                    command.CommandText = _updateMaCotDayDan;
+
+                    var numRowUpdateDayDan = 0;
+
+                    foreach (var cotDienMaCotUpdate in cotDienMaCotUpdates)
+                    {
+                        MA_COT_VALUE.Value = cotDienMaCotUpdate.MA_COT_UPDATE;
+                        MA_COT_CONDITION.Value = cotDienMaCotUpdate.MA_COT;
+                        numRowUpdateDayDan += await command.ExecuteNonQueryAsync();
+                    }
+
+                    #endregion
+
+                    #region "EN_DUONGDAY_COT"
+
+                    command.CommandText = _updateMaCotDuongDayCot;
+
+                    var numRowUpdateDuongDayCot = 0;
+
+                    foreach (var cotDienMaCotUpdate in cotDienMaCotUpdates)
+                    {
+                        MA_COT_VALUE.Value = cotDienMaCotUpdate.MA_COT_UPDATE;
+                        MA_COT_CONDITION.Value = cotDienMaCotUpdate.MA_COT;
+                        numRowUpdateDuongDayCot += await command.ExecuteNonQueryAsync();
+                    }
+
+                    #endregion
 
                     #endregion
 
                     await transaction.CommitAsync();
 
-                    _logger.LogInformation($"Số bản ghi đã xóa trong bảng EN_COTDIEN: {numRowDelete}");
-                    _logger.LogInformation($"Số bản ghi đã thêm mới vào bảng EN_COTDIEN: {numRowAdd}");
+                    //_logger.LogInformation($"Số bản ghi đã xóa trong bảng EN_COTDIEN: {numRowDelete}");
+                    //_logger.LogInformation($"Số bản ghi đã thêm mới vào bảng EN_COTDIEN: {numRowAdd}");
+                    //_logger.LogInformation($"Số bản ghi đã cập nhật vào bảng EN_DAYDAN: {numRowUpdateDayDan}");
+                    //_logger.LogInformation($"Số bản ghi đã cập nhật vào bảng EN_DUONGDAY_COT: {numRowUpdateDuongDayCot}");
+
                 }
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
             }
         }
 
-        private async Task DeleteAndInsertTramBienAp(List<EN_TRAMBIENAP> tramBienAps, string sQLDelete)
+        private async Task DeleteAndInsertTramBienAp(List<EN_TRAMBIENAP> tramBienAps, string sQLDelete, List<EN_TRAMBIENAP> tramBienApUpdates)
         {
             try
             {
@@ -484,6 +811,11 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                     pMATTDKV.ParameterName = "MATTDKV";
                     command.Parameters.Add(pMATTDKV);
 
+                    DbParameter pOBJECTID = command.CreateParameter();
+                    pOBJECTID.DbType = DbType.Decimal;
+                    pOBJECTID.ParameterName = "OBJECTID";
+                    command.Parameters.Add(pOBJECTID);
+
                     #endregion
 
                     var numRowAdd = 0;
@@ -507,15 +839,55 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                         pMATRAM.Value = tramBienAp.MATRAM;
                         pSOHUU.Value = tramBienAp.SOHUU;
                         pMATTDKV.Value = tramBienAp.MATTDKV;
-                        numRowAdd += await command.ExecuteNonQueryAsync();
+                        pOBJECTID.Value = tramBienAp.OBJECTID;
+                        try
+                        {
+                            numRowAdd += await command.ExecuteNonQueryAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(JsonConvert.SerializeObject(tramBienAp));
+                            _logger.LogError(ex.Message, ex);
+                        }
+                        
                     }
+
+                    #endregion
+
+                    #region "Update dữ liệu các bảng liên quan khi trường MATRAM bị chỉnh sửa"
+
+                    DbParameter MATRAM_VALUE = command.CreateParameter();
+                    MATRAM_VALUE.DbType = DbType.String;
+                    MATRAM_VALUE.ParameterName = "MATRAM_VALUE";
+                    command.Parameters.Add(MATRAM_VALUE);
+
+                    DbParameter MATRAM_CONDITION = command.CreateParameter();
+                    MATRAM_CONDITION.DbType = DbType.String;
+                    MATRAM_CONDITION.ParameterName = "MATRAM_CONDITION";
+                    command.Parameters.Add(MATRAM_CONDITION);
+
+                    #region "EN_TRAMBIENAP_DUONGDAY"
+
+                    command.CommandText = _updateMaTramTramBienApDuongDay;
+
+                    var numRowUpdateTramBienApDuongDay = 0;
+
+                    foreach (var tramBienApUpdate in tramBienApUpdates)
+                    {
+                        MATRAM_VALUE.Value = tramBienApUpdate.MATRAM_UPDATE;
+                        MATRAM_CONDITION.Value = tramBienApUpdate.MATRAM;
+                        numRowUpdateTramBienApDuongDay += await command.ExecuteNonQueryAsync();
+                    }
+
+                    #endregion
 
                     #endregion
 
                     await transaction.CommitAsync();
 
-                    _logger.LogInformation($"Số bản ghi đã xóa trong bảng EN_TRAMBIENAP: {numRowDelete}");
-                    _logger.LogInformation($"Số bản ghi đã thêm mới vào bảng EN_TRAMBIENAP: {numRowAdd}");
+                    //_logger.LogInformation($"Số bản ghi đã xóa trong bảng EN_TRAMBIENAP: {numRowDelete}");
+                    //_logger.LogInformation($"Số bản ghi đã thêm mới vào bảng EN_TRAMBIENAP: {numRowAdd}");
+                    //_logger.LogInformation($"Số bản ghi đã cập nhật vào bảng EN_TRAMBIENAP_DUONGDAY: {numRowUpdateTramBienApDuongDay}");
                 }
             }
             catch (Exception ex)
@@ -524,7 +896,7 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
             }
         }
 
-        private async Task DeleteAndInsertDuongDay(List<EN_DUONGDAY> duongDays, string sQLDelete)
+        private async Task DeleteAndInsertDuongDay(List<EN_DUONGDAY> duongDays, string sQLDelete, List<EN_DUONGDAY> duongDayUpdates)
         {
             try
             {
@@ -714,6 +1086,10 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                     NAM_VH.ParameterName = "NAM_VH";
                     command.Parameters.Add(NAM_VH);
 
+                    DbParameter OBJECTID = command.CreateParameter();
+                    OBJECTID.DbType = DbType.Decimal;
+                    OBJECTID.ParameterName = "OBJECTID";
+                    command.Parameters.Add(OBJECTID);
 
                     #endregion
 
@@ -754,15 +1130,84 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                         TENDUONGDAYCHINH.Value = duongDay.TENDUONGDAYCHINH;
                         MATTDKV.Value = duongDay.MATTDKV;
                         NAM_VH.Value = duongDay.NAM_VH;
-                        numRowAdd += await command.ExecuteNonQueryAsync();
+                        OBJECTID.Value = duongDay.OBJECTID;
+                        try
+                        {
+                            numRowAdd += await command.ExecuteNonQueryAsync();
+                        } catch (Exception ex)
+                        {
+                            _logger.LogWarning(JsonConvert.SerializeObject(duongDay));
+                            _logger.LogError(ex.Message, ex);
+                        }
+                        
                     }
+
+                    #endregion
+
+                    #region "Update dữ liệu các bảng liên quan khi trường MADUONGDAY bị chỉnh sửa"
+
+                    DbParameter MADUONGDAY_VALUE = command.CreateParameter();
+                    MADUONGDAY_VALUE.DbType = DbType.String;
+                    MADUONGDAY_VALUE.ParameterName = "MADUONGDAY_VALUE";
+                    command.Parameters.Add(MADUONGDAY_VALUE);
+
+                    DbParameter MADUONGDAY_CONDITION = command.CreateParameter();
+                    MADUONGDAY_CONDITION.DbType = DbType.String;
+                    MADUONGDAY_CONDITION.ParameterName = "MADUONGDAY_CONDITION";
+                    command.Parameters.Add(MADUONGDAY_CONDITION);
+
+                    #region "EN_DAYDAN"
+
+                    command.CommandText = _updateMaDuongDayDayDan;
+
+                    var numRowUpdateDayDan = 0;
+
+                    foreach (var duongDayUpdate in duongDayUpdates)
+                    {
+                        MADUONGDAY_VALUE.Value = duongDayUpdate.MADUONGDAY_UPDATE;
+                        MADUONGDAY_CONDITION.Value = duongDayUpdate.MADUONGDAY;
+                        numRowUpdateDayDan += await command.ExecuteNonQueryAsync();
+                    }
+
+                    #endregion
+
+                    #region "EN_DUONGDAY_COT"
+
+                    command.CommandText = _updateMaDuongDayDuongDayCot;
+
+                    var numRowUpdateDuongDayCot = 0;
+
+                    foreach (var duongDayUpdate in duongDayUpdates)
+                    {
+                        MADUONGDAY_VALUE.Value = duongDayUpdate.MADUONGDAY_UPDATE;
+                        MADUONGDAY_CONDITION.Value = duongDayUpdate.MADUONGDAY;
+                        numRowUpdateDuongDayCot += await command.ExecuteNonQueryAsync();
+                    }
+
+                    #endregion
+
+                    #region "EN_TRAMBIENAP_DUONGDAY"
+                    command.CommandText = _updateMaDuongDayTramBienApDuongDay;
+
+                    var numRowUpdateTramBienApDuongDay = 0;
+
+                    foreach (var duongDayUpdate in duongDayUpdates)
+                    {
+                        MADUONGDAY_VALUE.Value = duongDayUpdate.MADUONGDAY_UPDATE;
+                        MADUONGDAY_CONDITION.Value = duongDayUpdate.MADUONGDAY;
+                        numRowUpdateTramBienApDuongDay += await command.ExecuteNonQueryAsync();
+                    }
+                    #endregion
 
                     #endregion
 
                     await transaction.CommitAsync();
 
-                    _logger.LogInformation($"Số bản ghi đã xóa trong bảng EN_DUONGDAY: {numRowDelete}");
-                    _logger.LogInformation($"Số bản ghi đã thêm mới vào bảng EN_DUONGDAY: {numRowAdd}");
+                    //_logger.LogInformation($"Số bản ghi đã xóa trong bảng EN_DUONGDAY: {numRowDelete}");
+                    //_logger.LogInformation($"Số bản ghi đã thêm mới vào bảng EN_DUONGDAY: {numRowAdd}");
+                    //_logger.LogInformation($"Số bản ghi đã cập nhật vào bảng EN_DAYDAN: {numRowUpdateDayDan}");
+                    //_logger.LogInformation($"Số bản ghi đã cập nhật vào bảng EN_DUONGDAY_COT: {numRowUpdateDuongDayCot}");
+                    //_logger.LogInformation($"Số bản ghi đã cập nhật vào bảng EN_TRAMBIENAP_DUONGDAY: {numRowUpdateTramBienApDuongDay}");
                 }
             }
             catch (Exception ex)
@@ -842,6 +1287,7 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                     pMADVQL.DbType = DbType.String;
                     pMADVQL.ParameterName = "MADVQL";
                     command.Parameters.Add(pMADVQL);
+
                     #endregion
 
                     var numRowAdd = 0;
@@ -863,8 +1309,8 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
 
                     await transaction.CommitAsync();
 
-                    _logger.LogInformation($"Số bản ghi đã xóa trong bảng EN_FULLTEXTSEARCH: {numRowDelete}");
-                    _logger.LogInformation($"Số bản ghi đã thêm vào trong bảng EN_FULLTEXTSEARCH: {numRowAdd}");
+                    //_logger.LogInformation($"Số bản ghi đã xóa trong bảng EN_FULLTEXTSEARCH: {numRowDelete}");
+                    //_logger.LogInformation($"Số bản ghi đã thêm vào trong bảng EN_FULLTEXTSEARCH: {numRowAdd}");
                 }
                 await DeleteAddInsertFeaturesAsync(loaiDT, fullTextSearchs);
             }
@@ -928,6 +1374,168 @@ namespace eNPT_DongBoDuLieu.Services.DataBases
                 _logger.LogError(ex.Message, ex);
             }
             return ret;
+        }
+
+        /// <summary>
+        /// Truy vấn lấy thông tin trường MA_COT, OBJECTID
+        /// </summary>
+        /// <param name="cotDiens"></param>
+        /// <returns></returns>
+        private async Task<List<EN_COTDIEN>> GetMaCotByObjectId(List<EN_COTDIEN> cotDiens)
+        {
+            var rets = new List<EN_COTDIEN>();
+            try
+            {
+                var strBuild = new StringBuilder("SELECT OBJECTID, MA_COT FROM EN_COTDIEN WHERE ");
+                var strFormat = "(OBJECTID = '{0}' AND MA_COT <> '{1}')";
+                var first = true;
+                foreach (var cotDien in cotDiens)
+                {
+                    if (first)
+                    {
+                        strBuild.AppendLine(string.Format(strFormat, cotDien.OBJECTID, cotDien.MA_COT));
+                        first = false;
+                    }
+                    else
+                    {
+                        strBuild.AppendLine(string.Format($"OR {strFormat}", cotDien.OBJECTID, cotDien.MA_COT));
+                    }
+                }
+                var sQLQuery = strBuild.ToString();
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    await _context.Database.OpenConnectionAsync();
+
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.CommandText = sQLQuery;
+
+                    using (var result = await command.ExecuteReaderAsync())
+                    {
+                        while (result.Read())
+                        {
+                            var objectId = result.GetDecimal(0);
+                            var maCot = result.GetString(1);
+                            var cotDien = new EN_COTDIEN();
+                            cotDien.OBJECTID = objectId;
+                            cotDien.MA_COT = maCot;
+                            rets.Add(cotDien);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+            }
+            return rets;
+        }
+
+        /// <summary>
+        /// Truy vấn lấy thông tin trường MATRAM, OBJECTID
+        /// </summary>
+        /// <param name="tramBienAps"></param>
+        /// <returns></returns>
+        private async Task<List<EN_TRAMBIENAP>> GetMaTramByObjectId(List<EN_TRAMBIENAP> tramBienAps)
+        {
+            var rets = new List<EN_TRAMBIENAP>();
+            try
+            {
+                var strBuild = new StringBuilder("SELECT OBJECTID, MATRAM FROM EN_TRAMBIENAP WHERE ");
+                var strFormat = "(OBJECTID = '{0}' AND MATRAM <> '{1}')";
+                var first = true;
+                foreach (var tramBienAp in tramBienAps)
+                {
+                    if (first)
+                    {
+                        strBuild.AppendLine(string.Format(strFormat, tramBienAp.OBJECTID, tramBienAp.MATRAM));
+                        first = false;
+                    }
+                    else
+                    {
+                        strBuild.AppendLine(string.Format($"OR {strFormat}", tramBienAp.OBJECTID, tramBienAp.MATRAM));
+                    }
+                }
+                var sQLQuery = strBuild.ToString();
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    await _context.Database.OpenConnectionAsync();
+
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.CommandText = sQLQuery;
+
+                    using (var result = await command.ExecuteReaderAsync())
+                    {
+                        while (result.Read())
+                        {
+                            var objectId = result.GetDecimal(0);
+                            var maTram = result.GetString(1);
+                            var tramBienAp = new EN_TRAMBIENAP();
+                            tramBienAp.OBJECTID = objectId;
+                            tramBienAp.MATRAM = maTram;
+                            rets.Add(tramBienAp);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+            }
+            return rets;
+        }
+
+        /// <summary>
+        /// Truy vấn lấy thông tin trường MADUONGDAY, OBJECTID
+        /// </summary>
+        /// <param name="duongDays"></param>
+        /// <returns></returns>
+        private async Task<List<EN_DUONGDAY>> GetMaDuongDayByObjectId(List<EN_DUONGDAY> duongDays)
+        {
+            var rets = new List<EN_DUONGDAY>();
+            try
+            {
+                var strBuild = new StringBuilder("SELECT OBJECTID, MADUONGDAY FROM EN_DUONGDAY WHERE ");
+                var strFormat = "(OBJECTID = '{0}' AND MADUONGDAY <> '{1}')";
+                var first = true;
+                foreach (var duongDay in duongDays)
+                {
+                    if (first)
+                    {
+                        strBuild.AppendLine(string.Format(strFormat, duongDay.OBJECTID, duongDay.MADUONGDAY));
+                        first = false;
+                    }
+                    else
+                    {
+                        strBuild.AppendLine(string.Format($"OR {strFormat}", duongDay.OBJECTID, duongDay.MADUONGDAY));
+                    }
+                }
+                var sQLQuery = strBuild.ToString();
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    await _context.Database.OpenConnectionAsync();
+
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.CommandText = sQLQuery;
+
+                    using (var result = await command.ExecuteReaderAsync())
+                    {
+                        while (result.Read())
+                        {
+                            var objectId = result.GetDecimal(0);
+                            var maDuongDay = result.GetString(1);
+                            var duongDay = new EN_DUONGDAY();
+                            duongDay.OBJECTID = objectId;
+                            duongDay.MADUONGDAY = maDuongDay;
+                            rets.Add(duongDay);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+            }
+            return rets;
         }
 
     }

@@ -36,5 +36,6 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
         public string MACT { get; set; }
         public string TENCT { get; set; }
         public string MATTDKV { get; set; }
+        public decimal? OBJECTID { get; set; }
     }
 }

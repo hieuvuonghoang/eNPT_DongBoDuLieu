@@ -8,7 +8,7 @@ sc delete eNPT_DongBoDuLieu
 
 ::create windows service
 ::echo "create service..."
-sc create "eNPT_DongBoDuLieu" binPath="C:\Program Files\SV Tech\DongBoDuLieuServices\eNPT_DongBoDuLieu.exe"
+sc create "eNPT_DongBoDuLieu" binPath="C:\Program Files\SV Tech\DongBoDuLieuServices\eNPT_DongBoDuLieu.exe \"C:\Program Files\SV Tech\DongBoDuLieuServices\""
 
 ::config service automatic
 ::echo "config service automatic..."

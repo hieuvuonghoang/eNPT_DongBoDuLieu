@@ -1,4 +1,6 @@
-﻿using System;
+﻿using eNPT_DongBoDuLieu.Models.JsonConverts;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -16,6 +18,7 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
         public string TINH { get; set; }
         public string HUYEN { get; set; }
         public string XA { get; set; }
+        [JsonConverter(typeof(CustomDateTimeUtcConverterGetYear))]
         public decimal? NAM_VH { get; set; }
         public string TEN_TTD { get; set; }
         public string MADVQL { get; set; }
@@ -24,5 +27,6 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
         public string MATRAM { get; set; }
         public string SOHUU { get; set; }
         public string MATTDKV { get; set; }
+        public decimal? OBJECTID { get; set; }
     }
 }

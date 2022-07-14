@@ -5,6 +5,7 @@ using eNPT_DongBoDuLieu.Services;
 using eNPT_DongBoDuLieu.Services.DataBases;
 using eNPT_DongBoDuLieu.Services.Datas;
 using eNPT_DongBoDuLieu.Services.Portals;
+using CommandLine;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,9 +21,19 @@ namespace eNPT_DongBoDuLieu
 {
     public class Program
     {
-        static async Task Main(string[] args)
+        static async Task<int> Main(string[] args)
         {
-            await Host.CreateDefaultBuilder(args)
+            return await Parser.Default.ParseArguments<CommandLineOptions>(args)
+                .MapResult(async (opts) =>
+                {
+                    await CreateHostBuilder(args, opts).Build().RunAsync();
+                    return 0;
+                },
+                errs => Task.FromResult(-1)); // Invalid arguments
+        }
+
+        private static IHostBuilder CreateHostBuilder(string[] args, CommandLineOptions opts)
+        => Host.CreateDefaultBuilder(args)
                 .UseWindowsService()
                 .UseSerilog()
                 .ConfigureServices((hostContext, services) =>
@@ -40,17 +51,15 @@ namespace eNPT_DongBoDuLieu
 
                     services.AddDbContext<ModelContext>
                     (options => options.UseOracle(hostContext.Configuration.GetConnectionString("EVNNPT_Database")), ServiceLifetime.Singleton);
-                    
+
                     services.AddHostedService<Worker>();
 
+                    services.AddSingleton(opts);
                     services.AddSingleton<IDataServices, DataServices>();
                     services.AddSingleton<IPortalServices, PortalServices>();
                     services.AddSingleton<IDataBaseServices, DataBaseServices>();
 
-                })
-                .Build()
-                .RunAsync();
-        }
+                });
 
         private static bool ValidateServerCertificattion(HttpRequestMessage requestMessage, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {

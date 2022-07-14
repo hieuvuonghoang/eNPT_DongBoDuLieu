@@ -1,0 +1,2 @@
+﻿[JsonConverter(typeof(CustomDateTimeUtcConverterGetYear))]
+[JsonConverter(typeof(CustomDateTimeUtcConverter))]

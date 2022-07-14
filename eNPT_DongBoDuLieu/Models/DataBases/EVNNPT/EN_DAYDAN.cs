@@ -1,22 +1,16 @@
-﻿using eNPT_DongBoDuLieu.Models.JsonConverts;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 #nullable disable
 
 namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
 {
-    public partial class EN_DUONGDAY
+    public partial class EN_DAYDAN
     {
-        public string MADUONGDAY { get; set; }
-        public string TENDUONGDAY { get; set; }
+        public string MA_DAY { get; set; }
+        public string TEN_DAY { get; set; }
+        public decimal? NAM_VH { get; set; }
         public decimal? CHIEUDAI_DD { get; set; }
-        public string GHICHU { get; set; }
-        public string MADVQL { get; set; }
-        public string MADUONGDAYCHINH { get; set; }
-        public string TEN_TTD { get; set; }
-        public string TEN_CONGTY { get; set; }
         public string HANG_SX { get; set; }
         public string NUOC_SX { get; set; }
         public decimal? DONGDIEN_DM { get; set; }
@@ -34,15 +28,15 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
         public decimal? SOLUONG_MN { get; set; }
         public decimal? SOLUONG_KDV { get; set; }
         public decimal? SOLUONG_TBCB { get; set; }
+        public string GHICHU { get; set; }
         public string DUONGDAY { get; set; }
         public string VITRIDAT { get; set; }
-        public string CAPDA { get; set; }
-        public string TUTRAM { get; set; }
-        public string DENTRAM { get; set; }
-        public string TENDUONGDAYCHINH { get; set; }
+        public string MADVQL { get; set; }
+        public string TEN_TTD { get; set; }
+        public string MA_COT { get; set; }
         public string MATTDKV { get; set; }
-        [JsonConverter(typeof(CustomDateTimeUtcConverter))]
-        public DateTime? NAM_VH { get; set; }
-        public decimal? OBJECTID { get; set; }
+        public string TEN_CONGTY { get; set; }
+        public string NGAY_SX { get; set; }
+        public string MADUONGDAY { get; set; }
     }
 }

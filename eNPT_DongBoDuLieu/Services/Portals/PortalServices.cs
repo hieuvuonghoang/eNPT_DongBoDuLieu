@@ -141,7 +141,6 @@ namespace eNPT_DongBoDuLieu.Services.Portals
                 formdata.Add(new StringContent($"{resultOffset}"), "resultOffset");
                 formdata.Add(new StringContent($"{resultRecordCount}"), "resultRecordCount");
                 formdata.Add(new StringContent("*"), "outFields");
-                //formdata.Add(new StringContent($"{_appSettings.FieldName} DESC"), "orderByFields");
                 formdata.Add(new StringContent("json"), "f");
 
                 var request = new HttpRequestMessage(HttpMethod.Post, $"{linkFeatureService}/query");
@@ -180,6 +179,63 @@ namespace eNPT_DongBoDuLieu.Services.Portals
                 throw ex;
             }
             return ret;
+        }
+
+        public async Task<List<int>> GetObjectIDByOIDAsyncs(string token, ELoaiDT loaiDT, List<string> oIds)
+        {
+            var rets = new List<int>();
+            try
+            {
+                var linkFeatureService = GetLinkFeatureService(loaiDT);
+
+                var formdata = new MultipartFormDataContent();
+                var conditionQuery = string.Join(",", oIds);
+                conditionQuery = $"OBJECTID IN ({conditionQuery})";
+                formdata.Add(new StringContent(conditionQuery), "where");
+                formdata.Add(new StringContent($"true"), "returnIdsOnly");
+                formdata.Add(new StringContent("json"), "f");
+
+                var request = new HttpRequestMessage(HttpMethod.Post, $"{linkFeatureService}/query");
+                request.Headers.Add("Authorization", $"Bearer {token}");
+                request.Content = formdata;
+
+                var client = _httpClientFactory.CreateClient("HttpClientFactory");
+
+                var response = await client.SendAsync(request);
+                var resultStr = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonObj = JObject.Parse(resultStr);
+                    if (jsonObj["error"] != null)
+                    {
+                        //Lỗi
+                        throw new Exception($"Lỗi query trả về: {resultStr}");
+                    }
+                    else 
+                    {
+                        //Thành công
+                        var jToken = jsonObj["objectIds"];
+                        if (jToken != null && jToken.HasValues)
+                        {
+                            var objectIds = JArray.Parse(jsonObj["objectIds"].ToString());
+                            foreach (var objectId in objectIds)
+                            {
+                                rets.Add(int.Parse(objectId.ToString()));
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Gọi tới FeatureService '{linkFeatureService}' không thành công.");
+                }
+            } catch(Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw ex;
+            }
+            return rets;
         }
 
         private string GetLinkFeatureService(ELoaiDT loaiDT)

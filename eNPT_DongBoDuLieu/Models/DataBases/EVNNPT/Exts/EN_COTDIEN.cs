@@ -8,9 +8,9 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
     public partial class EN_COTDIEN
     {
         /// <summary>
-        /// Trường dữ liệu được thêm vào phục vụ xử lý dữ liệu, không tồn tại trong CSDL.
+        /// Mã cột điện update từ gdb
         /// </summary>
         [NotMapped]
-        public int OBJECTID { get; set; }
+        public string MA_COT_UPDATE { get; set; }
     }
 }

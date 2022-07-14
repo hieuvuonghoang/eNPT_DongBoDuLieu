@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eNPT_DongBoDuLieu", "eNPT_D
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "eNPT_DongBoDuLieu_x64_Setup", "SetupProject\SetupProject.vdproj", "{0B9DDA47-A274-4CA5-9734-884B995550C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService1", "WorkerService1\WorkerService1.csproj", "{D0D33444-0932-4A58-97B3-F2B713F1FAB7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,10 +19,6 @@ Global
 		{1D52642E-036B-47DC-A516-EDE185E71B62}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0B9DDA47-A274-4CA5-9734-884B995550C4}.Debug|Any CPU.ActiveCfg = Debug
 		{0B9DDA47-A274-4CA5-9734-884B995550C4}.Release|Any CPU.ActiveCfg = Release
-		{D0D33444-0932-4A58-97B3-F2B713F1FAB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D0D33444-0932-4A58-97B3-F2B713F1FAB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D0D33444-0932-4A58-97B3-F2B713F1FAB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D0D33444-0932-4A58-97B3-F2B713F1FAB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

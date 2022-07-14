@@ -18,12 +18,16 @@ namespace eNPT_DongBoDuLieu.Services.Datas
         private readonly AppSettings _appSettings;
         //Đối tượng SemaphoreSlim được sử dụng để kiểm soát quyền truy cập vào một tài nguyên
         private readonly SemaphoreSlim _semaphoregate;
+        private readonly CommandLineOptions _commandLineOptions;
+        private readonly string _pathFileLastEditDate;
 
-        public DataServices(IOptions<AppSettings> appSettings, ILogger<DataServices> logger)
+        public DataServices(IOptions<AppSettings> appSettings, ILogger<DataServices> logger, CommandLineOptions commandLineOptions)
         {
             _semaphoregate = new SemaphoreSlim(1);
             _logger = logger;
             _appSettings = appSettings.Value;
+            _commandLineOptions = commandLineOptions;
+            _pathFileLastEditDate = Path.Combine(_commandLineOptions.Path, _appSettings.PathFileLastEditDates);
         }
 
         public async Task WriteDataAsync(LastEditDate lastEditDate)
@@ -34,7 +38,7 @@ namespace eNPT_DongBoDuLieu.Services.Datas
                 //Gán dữ liệu trường 'NgayGio' = 'NgayGioHienTai'.
                 lastEditDate.NgayGio = lastEditDate.NgayGioHienTai;
                 var allText = JsonConvert.SerializeObject(lastEditDate, Formatting.Indented);
-                await File.WriteAllTextAsync(_appSettings.PathFileLastEditDates, allText);
+                await File.WriteAllTextAsync(_pathFileLastEditDate, allText);
             } catch(Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
@@ -51,7 +55,7 @@ namespace eNPT_DongBoDuLieu.Services.Datas
             try
             {
                 await _semaphoregate.WaitAsync();
-                var allText = await File.ReadAllTextAsync(_appSettings.PathFileLastEditDates);
+                var allText = await File.ReadAllTextAsync(_pathFileLastEditDate);
                 ret = JsonConvert.DeserializeObject<LastEditDate>(allText);
                 //Khởi tạo trường 'NgayGioHienTai' (ngày giờ hiện tại).
                 ret.NgayGioHienTai = DateTime.Now;

@@ -18,13 +18,15 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
         }
 
         public virtual DbSet<EN_COTDIEN> EN_COTDIENs { get; set; }
+        public virtual DbSet<EN_DAYDAN> EN_DAYDANs { get; set; }
         public virtual DbSet<EN_DUONGDAY> EN_DUONGDAYs { get; set; }
+        public virtual DbSet<EN_DUONGDAY_COT> EN_DUONGDAY_COTs { get; set; }
         public virtual DbSet<EN_FULLTEXTSEARCH> EN_FULLTEXTSEARCHes { get; set; }
         public virtual DbSet<EN_TRAMBIENAP> EN_TRAMBIENAPs { get; set; }
+        public virtual DbSet<EN_TRAMBIENAP_DUONGDAY> EN_TRAMBIENAP_DUONGDAYs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -105,6 +107,8 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
+                entity.Property(e => e.OBJECTID).HasColumnType("NUMBER(38)");
+
                 entity.Property(e => e.SOHUU)
                     .HasMaxLength(200)
                     .IsUnicode(false);
@@ -141,6 +145,120 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
 
                 entity.Property(e => e.XA)
                     .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<EN_DAYDAN>(entity =>
+            {
+                entity.HasKey(e => e.MA_DAY)
+                    .HasName("EN_DAYDAN_PK");
+
+                entity.ToTable("EN_DAYDAN");
+
+                entity.HasIndex(e => new { e.MA_COT, e.MA_DAY }, "EN_DAYDAN_COT_IDX");
+
+                entity.Property(e => e.MA_DAY)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CAUTAO_CD)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CHIEUDAI_DD).HasColumnType("FLOAT");
+
+                entity.Property(e => e.CHIEUDAI_DRCD).HasColumnType("FLOAT");
+
+                entity.Property(e => e.DK_DAY).HasColumnType("FLOAT");
+
+                entity.Property(e => e.DK_LOI).HasColumnType("FLOAT");
+
+                entity.Property(e => e.DONGDIEN_DM).HasColumnType("FLOAT");
+
+                entity.Property(e => e.DUONGDAY)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.GHICHU)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.HANG_SX)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.HANG_SX_CD)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.KYHIEU)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LOAI_CD)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MADUONGDAY)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MADVQL)
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MATTDKV)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MA_CD)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MA_COT)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MA_DCS)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NAM_VH).HasColumnType("NUMBER(38)");
+
+                entity.Property(e => e.NGAY_SX)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NUOC_SX)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NUOC_SX_CD)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SOLUONG).HasColumnType("NUMBER(38)");
+
+                entity.Property(e => e.SOLUONG_KDV).HasColumnType("NUMBER(38)");
+
+                entity.Property(e => e.SOLUONG_MN).HasColumnType("NUMBER(38)");
+
+                entity.Property(e => e.SOLUONG_TBCB).HasColumnType("NUMBER(38)");
+
+                entity.Property(e => e.TEN_CONGTY)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TEN_DAY)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TEN_TTD)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.VITRIDAT)
+                    .HasMaxLength(200)
                     .IsUnicode(false);
             });
 
@@ -231,6 +349,8 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
+                entity.Property(e => e.OBJECTID).HasColumnType("NUMBER(38)");
+
                 entity.Property(e => e.SOLUONG).HasColumnType("NUMBER(38)");
 
                 entity.Property(e => e.SOLUONG_KDV).HasColumnType("NUMBER(38)");
@@ -260,6 +380,40 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
                     .IsUnicode(false);
 
                 entity.Property(e => e.VITRIDAT)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<EN_DUONGDAY_COT>(entity =>
+            {
+                entity.HasKey(e => new { e.MADUONGDAY, e.MA_COT })
+                    .HasName("EN_CONGTRINH_COT_PK");
+
+                entity.ToTable("EN_DUONGDAY_COT");
+
+                entity.Property(e => e.MADUONGDAY)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MA_COT)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MADVQL)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MATTDKV)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MAVITRI)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.STT).HasColumnType("NUMBER(38)");
+
+                entity.Property(e => e.TEN_TTD)
                     .HasMaxLength(100)
                     .IsUnicode(false);
             });
@@ -348,6 +502,8 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
 
                 entity.Property(e => e.NAM_VH).HasColumnType("NUMBER(38)");
 
+                entity.Property(e => e.OBJECTID).HasColumnType("NUMBER(38)");
+
                 entity.Property(e => e.SOHUU)
                     .HasMaxLength(10)
                     .IsUnicode(false);
@@ -369,6 +525,34 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
                     .IsUnicode(false);
 
                 entity.Property(e => e.XA)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<EN_TRAMBIENAP_DUONGDAY>(entity =>
+            {
+                entity.HasKey(e => new { e.MATRAM, e.MADUONGDAY })
+                    .HasName("EN_TRAMBIENAP_DUONGDAY_PK");
+
+                entity.ToTable("EN_TRAMBIENAP_DUONGDAY");
+
+                entity.Property(e => e.MATRAM)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MADUONGDAY)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MADVQL)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MATTDKV)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TEN_TTD)
                     .HasMaxLength(100)
                     .IsUnicode(false);
             });

@@ -8,9 +8,9 @@ namespace eNPT_DongBoDuLieu.Models.DataBases.EVNNPT
     public partial class EN_TRAMBIENAP
     {
         /// <summary>
-        /// Trường dữ liệu được thêm vào phục vụ xử lý dữ liệu, không tồn tại trong CSDL.
+        /// Mã trạm biến áp update từ gdb
         /// </summary>
         [NotMapped]
-        public int OBJECTID { get; set; }
+        public string MATRAM_UPDATE { get; set; }
     }
 }
